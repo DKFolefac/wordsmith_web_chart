@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.web.name }}
+  labels:
+    app: {{ .Values.web.name }}
+    group: {{ .Values.web.group }}
+spec:
+  replicas: {{ .Values.web.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.web.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.web.name }}
+        group: {{ .Values.web.group }}
+    spec:
+      containers:
+        - name: {{ .Values.web.name }}
+          image: {{ .Values.web.container.image }}  
+          ports:
+            - containerPort: {{ .Values.web.container.port }}
+          envFrom:
+            {{- range .Values.web.container.config }}
+            - configMapRef:
+                name: {{ .name }}
+            {{- end}}
+          env:
+            {{- range .Values.web.container.env}}
+            - name: {{ .key}}
+              value: {{ .value}}
+            {{- end}}

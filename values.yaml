@@ -1,0 +1,11 @@
+replicaCount: 1
+web:
+  name: web 
+  group: frontend
+  container:
+    image: dkfolefac/wordweb:19
+    port: 80
+  service:
+    type: NodePort
+    port: 3030
+  volume:
